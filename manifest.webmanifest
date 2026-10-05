@@ -1,0 +1,14 @@
+{
+  "name": "Organic House Cleaning — Free Quote",
+  "short_name": "OHC Quote",
+  "description": "Request a free quote from Anne & Rosana — Clean · Organize · Refresh.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F9F8F4",
+  "theme_color": "#2D4739",
+  "icons": [
+    {"src": "icons/ohc-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icons/ohc-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
