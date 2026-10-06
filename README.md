@@ -21,7 +21,7 @@ This repo also ships **Vercel serverless APIs** for:
 | `/api/admin/summary` | GET dashboard data (Bearer token) |
 | `/api/admin/leads` | PATCH `{ id, contacted }` |
 | `/api/admin/appointments` | GET / POST / DELETE |
-| `/api/cron/reminders` | Hourly cron (Bearer `CRON_SECRET`) |
+| `/api/cron/reminders` | Daily crons ~08:00 / ~18:00 ET (Bearer `CRON_SECRET`) |
 
 `config.js` sets `apiBase` for when the static site is served from CME/Pages (calls Vercel). On `*.vercel.app` it uses same-origin `/api`.
 
@@ -53,7 +53,7 @@ Do **not** commit real Twilio or KV secrets. Set them in the Vercel project → 
 
 1. Create a Twilio account and SMS-capable number.
 2. Set the three `TWILIO_*` env vars on the project.
-3. Cron runs hourly; reminders fire in the **18:00** and **08:00** Eastern hours for matching appointments.
+3. Hobby plan: two **daily** crons (`0 12 * * *` and `0 22 * * *` UTC ≈ 08:00 / 18:00 Eastern in EDT). Handler uses 7–9 and 17–19 local hour windows.
 
 Reminder template:
 
