@@ -1,9 +1,10 @@
-const CACHE_NAME = "ohc-quote-v2";
+const CACHE_NAME = "ohc-quote-v3-i18n";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./config.js",
+  "./i18n.js",
   "./app.js",
   "./qr-code.js",
   "./manifest.webmanifest",
@@ -38,11 +39,26 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
 function networkRequest(request) {
-  return fetch(request).then((response) => {
-    const copy = response.clone();
-    caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-    return response;
+  if (request.mode === "navigate") {
+    return new Request(request.url, { cache: "reload", credentials: "same-origin", redirect: "follow" });
+  }
+  return new Request(request, { cache: "reload" });
+}
+
+function fromCache(request) {
+  return caches.match(request).then((cached) => {
+    if (cached) return cached;
+    if (request.mode === "navigate") {
+      return caches.match("./index.html").then((index) => index || caches.match("./"));
+    }
+    return undefined;
   });
 }
 
@@ -57,6 +73,12 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   event.respondWith(
-    networkRequest(request).catch(() => caches.match(request).then((cached) => cached || caches.match("./")))
+    fetch(networkRequest(request)).then((response) => {
+      if (response && response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(request.url, copy));
+      }
+      return response;
+    }).catch(() => fromCache(request).then((cached) => cached || caches.match("./")))
   );
 });

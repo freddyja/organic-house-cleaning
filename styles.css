@@ -25,6 +25,29 @@ body {
 
 .mast { text-align: center; margin-bottom: 1.25rem; }
 .mast-top { position: relative; min-height: 3.5rem; }
+.lang-switch {
+  position: absolute; top: 0; left: 0; z-index: 2;
+  display: inline-flex; align-items: stretch;
+  border: 1px solid var(--ink); border-radius: 8px;
+  overflow: hidden; background: var(--cream);
+  padding-top: env(safe-area-inset-top, 0);
+  touch-action: manipulation;
+}
+.lang-btn {
+  min-width: 2rem; min-height: 34px; padding: 0 7px;
+  border: 0; border-right: 1px solid var(--line);
+  background: transparent; color: var(--ink);
+  font: inherit; font-weight: 750; font-size: .72rem;
+  letter-spacing: .04em; cursor: pointer;
+  touch-action: manipulation;
+}
+.lang-btn:last-child { border-right: 0; }
+.lang-btn:hover, .lang-btn:focus-visible {
+  background: var(--beige); outline: none;
+}
+.lang-btn.is-active {
+  background: var(--ink); color: var(--cream);
+}
 .mast-brand {
   display: flex; flex-direction: column; align-items: center; gap: .55rem;
   padding: 0 4.2rem;
@@ -164,7 +187,9 @@ textarea { min-height: 5rem; resize: vertical; }
   .share-panel-copy { align-items: center; }
   .action-btn.share-copy { align-self: center; }
   .svc-grid { grid-template-columns: 1fr; }
-  .mast-brand { padding: 0 3.4rem; }
+  .mast-brand { padding: 0 3.6rem; }
+  .lang-btn { min-width: 1.85rem; padding: 0 5px; font-size: .68rem; }
+  .quick-actions { min-width: 64px; }
 }
 
 /* —— Admin —— */

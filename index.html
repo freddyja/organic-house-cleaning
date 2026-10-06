@@ -4,49 +4,54 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#2D4739">
-  <meta name="description" content="Organic House Cleaning by Anne &amp; Rosana. Clean · Organize · Refresh. Request a free quote — organic, family &amp; pet friendly. From $150*.">
+  <meta name="description" content="Organic House Cleaning by Anne &amp; Rosana. Clean · Organize · Refresh. Request a free quote — organic, family &amp; pet friendly. From $150*." data-i18n-content="metaDesc">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="OHC Quote">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/ohc-180.png">
-  <title>Organic House Cleaning — Free Quote</title>
+  <title data-i18n="pageTitle">Organic House Cleaning — Free Quote</title>
   <link rel="icon" href="icons/ohc-192.png" type="image/png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <a class="skip" href="#quote">Skip to quote form</a>
+  <a class="skip" href="#quote" data-i18n="skip">Skip to quote form</a>
   <div class="wrap">
     <header class="mast">
       <div class="mast-top">
+        <div class="lang-switch" id="lang-switch" role="group" aria-label="Choose language" data-i18n-aria="langAria">
+          <button type="button" class="lang-btn is-active" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" class="lang-btn" data-lang="es" aria-pressed="false">ES</button>
+          <button type="button" class="lang-btn" data-lang="pt" aria-pressed="false">PT</button>
+        </div>
         <div class="mast-brand">
           <img class="logo-mark" src="icons/logo-mark.svg" width="56" height="56" alt="">
           <div class="brand-text">
-            <p class="kicker">Mother &amp; Daughter Owned · 20+ Years</p>
-            <h1 class="logo">Organic House Cleaning</h1>
-            <p class="tagline">Clean · Organize · Refresh</p>
-            <p class="owners">Anne &amp; Rosana</p>
+            <p class="kicker" data-i18n="kicker">Mother &amp; Daughter Owned · 20+ Years</p>
+            <h1 class="logo" data-i18n="logo">Organic House Cleaning</h1>
+            <p class="tagline" data-i18n="tagline">Clean · Organize · Refresh</p>
+            <p class="owners" data-i18n="owners">Anne &amp; Rosana</p>
           </div>
         </div>
-        <div class="quick-actions" aria-label="Site actions">
-          <button type="button" class="action-btn" id="share-site">Share</button>
-          <button type="button" class="action-btn" id="install-app" hidden>Install</button>
+        <div class="quick-actions" aria-label="Site actions" data-i18n-aria="quickActionsAria">
+          <button type="button" class="action-btn" id="share-site" data-i18n="share">Share</button>
+          <button type="button" class="action-btn" id="install-app" hidden data-i18n="install">Install</button>
         </div>
       </div>
-      <p class="hero-line">A cleaner home. A healthier way to clean.</p>
-      <p class="phone-line"><a href="tel:+17273792528">727-379-2528</a> · Call or text for a free quote</p>
-      <p class="price-line">Cleaning from $150* · Organization custom pricing</p>
-      <ul class="values" aria-label="Highlights">
-        <li>Healthier cleaning options</li>
-        <li>Family &amp; pet friendly</li>
-        <li>Reliable &amp; trustworthy</li>
+      <p class="hero-line" data-i18n="hero">A cleaner home. A healthier way to clean.</p>
+      <p class="phone-line"><a href="tel:+17273792528">727-379-2528</a> · <span data-i18n="phoneCta">Call or text for a free quote</span></p>
+      <p class="price-line" data-i18n="price">Cleaning from $150* · Organization custom pricing</p>
+      <ul class="values" aria-label="Highlights" data-i18n-aria="valuesAria">
+        <li data-i18n="value1">Healthier cleaning options</li>
+        <li data-i18n="value2">Family &amp; pet friendly</li>
+        <li data-i18n="value3">Reliable &amp; trustworthy</li>
       </ul>
       <section class="share-panel" id="share-panel" aria-labelledby="share-panel-title" hidden>
         <div class="share-panel-copy">
-          <p class="share-kicker">Share the quote page</p>
-          <h2 id="share-panel-title">Scan for a free quote</h2>
-          <p class="share-note">Point your phone camera at this code.</p>
-          <button type="button" class="action-btn share-copy" id="copy-share-link">Copy link</button>
+          <p class="share-kicker" data-i18n="shareKicker">Share the quote page</p>
+          <h2 id="share-panel-title" data-i18n="shareTitle">Scan for a free quote</h2>
+          <p class="share-note" data-i18n="shareNote">Point your phone camera at this code.</p>
+          <button type="button" class="action-btn share-copy" id="copy-share-link" data-i18n="copyLink">Copy link</button>
         </div>
         <div class="share-qr" id="share-qr"></div>
       </section>
@@ -54,112 +59,113 @@
       <p class="toast" id="toast" role="status" aria-live="polite" hidden></p>
     </header>
 
-    <section class="services" aria-label="Services">
-      <h2>Our services</h2>
+    <section class="services" aria-label="Services" data-i18n-aria="servicesAria">
+      <h2 data-i18n="servicesTitle">Our services</h2>
       <div class="svc-grid">
-        <article><h3>Residential cleaning</h3><p>Regular visits from $150*</p></article>
-        <article><h3>Deep cleaning</h3><p>Thorough reset when you need it</p></article>
-        <article><h3>Move-in / move-out</h3><p>Empty homes ready to hand over</p></article>
-        <article><h3>Home organization</h3><p>Closets, kitchens, pantries, bedrooms, whole-home</p></article>
+        <article><h3 data-i18n="svcResidential">Residential cleaning</h3><p data-i18n="svcResidentialBody">Regular visits from $150*</p></article>
+        <article><h3 data-i18n="svcDeep">Deep cleaning</h3><p data-i18n="svcDeepBody">Thorough reset when you need it</p></article>
+        <article><h3 data-i18n="svcMove">Move-in / move-out</h3><p data-i18n="svcMoveBody">Empty homes ready to hand over</p></article>
+        <article><h3 data-i18n="svcOrg">Home organization</h3><p data-i18n="svcOrgBody">Closets, kitchens, pantries, bedrooms, whole-home</p></article>
       </div>
     </section>
 
-    <section class="ticket" id="quote" aria-label="Free quote request">
-      <h2>Request a free quote</h2>
-      <p class="form-intro">Fill this in — we save your request for Anne &amp; Rosana, then open a text to <strong>727-379-2528</strong> so you can tap Send.</p>
+    <section class="ticket" id="quote" aria-label="Free quote request" data-i18n-aria="quoteAria">
+      <h2 data-i18n="quoteTitle">Request a free quote</h2>
+      <p class="form-intro" data-i18n="formIntro">Fill this in — we save your request for Anne &amp; Rosana, then open a text to 727-379-2528 so you can tap Send.</p>
 
-      <label class="form-row" for="cust-name"><span>Name *</span>
+      <label class="form-row" for="cust-name"><span data-i18n="labelName">Name *</span>
         <input id="cust-name" name="name" type="text" maxlength="80" autocomplete="name" required enterkeyhint="next">
       </label>
-      <label class="form-row" for="cust-phone"><span>Phone *</span>
+      <label class="form-row" for="cust-phone"><span data-i18n="labelPhone">Phone *</span>
         <input id="cust-phone" name="phone" type="tel" maxlength="20" inputmode="tel" autocomplete="tel" required enterkeyhint="next">
       </label>
-      <label class="form-row" for="cust-email"><span>Email</span>
+      <label class="form-row" for="cust-email"><span data-i18n="labelEmail">Email</span>
         <input id="cust-email" name="email" type="email" maxlength="120" autocomplete="email" enterkeyhint="next">
       </label>
-      <label class="form-row" for="cust-address"><span>Address / ZIP *</span>
+      <label class="form-row" for="cust-address"><span data-i18n="labelAddress">Address / ZIP *</span>
         <input id="cust-address" name="address" type="text" maxlength="160" autocomplete="street-address" required enterkeyhint="next">
       </label>
 
       <fieldset class="diets">
-        <legend>Home type</legend>
+        <legend data-i18n="legendHomeType">Home type</legend>
         <div class="chips">
-          <label class="chip"><input type="radio" name="home-type" value="House" checked> House</label>
-          <label class="chip"><input type="radio" name="home-type" value="Condo / Apt"> Condo / Apt</label>
-          <label class="chip"><input type="radio" name="home-type" value="Townhome"> Townhome</label>
-          <label class="chip"><input type="radio" name="home-type" value="Other"> Other</label>
+          <label class="chip"><input type="radio" name="home-type" value="House" checked> <span data-i18n="chipHouse">House</span></label>
+          <label class="chip"><input type="radio" name="home-type" value="Condo / Apt"> <span data-i18n="chipCondo">Condo / Apt</span></label>
+          <label class="chip"><input type="radio" name="home-type" value="Townhome"> <span data-i18n="chipTownhome">Townhome</span></label>
+          <label class="chip"><input type="radio" name="home-type" value="Other"> <span data-i18n="chipOther">Other</span></label>
         </div>
       </fieldset>
 
       <div class="row2">
-        <label class="form-row" for="beds"><span>Bedrooms</span>
-          <input id="beds" name="beds" type="number" min="0" max="20" inputmode="numeric" placeholder="e.g. 3">
+        <label class="form-row" for="beds"><span data-i18n="labelBeds">Bedrooms</span>
+          <input id="beds" name="beds" type="number" min="0" max="20" inputmode="numeric" placeholder="e.g. 3" data-i18n-placeholder="phBeds">
         </label>
-        <label class="form-row" for="baths"><span>Bathrooms</span>
-          <input id="baths" name="baths" type="number" min="0" max="20" step="0.5" inputmode="decimal" placeholder="e.g. 2">
+        <label class="form-row" for="baths"><span data-i18n="labelBaths">Bathrooms</span>
+          <input id="baths" name="baths" type="number" min="0" max="20" step="0.5" inputmode="decimal" placeholder="e.g. 2" data-i18n-placeholder="phBaths">
         </label>
       </div>
-      <label class="form-row" for="sqft"><span>Approx. sq ft (optional)</span>
-        <input id="sqft" name="sqft" type="text" maxlength="20" inputmode="numeric" placeholder="e.g. 1800">
+      <label class="form-row" for="sqft"><span data-i18n="labelSqft">Approx. sq ft (optional)</span>
+        <input id="sqft" name="sqft" type="text" maxlength="20" inputmode="numeric" placeholder="e.g. 1800" data-i18n-placeholder="phSqft">
       </label>
 
       <fieldset class="diets">
-        <legend>Pets</legend>
+        <legend data-i18n="legendPets">Pets</legend>
         <div class="chips">
-          <label class="chip"><input type="radio" name="pets" value="No pets" checked> No pets</label>
-          <label class="chip"><input type="radio" name="pets" value="Dog(s)"> Dog(s)</label>
-          <label class="chip"><input type="radio" name="pets" value="Cat(s)"> Cat(s)</label>
-          <label class="chip"><input type="radio" name="pets" value="Other / multiple"> Other / multiple</label>
+          <label class="chip"><input type="radio" name="pets" value="No pets" checked> <span data-i18n="chipNoPets">No pets</span></label>
+          <label class="chip"><input type="radio" name="pets" value="Dog(s)"> <span data-i18n="chipDogs">Dog(s)</span></label>
+          <label class="chip"><input type="radio" name="pets" value="Cat(s)"> <span data-i18n="chipCats">Cat(s)</span></label>
+          <label class="chip"><input type="radio" name="pets" value="Other / multiple"> <span data-i18n="chipPetsOther">Other / multiple</span></label>
         </div>
       </fieldset>
 
       <fieldset class="diets">
-        <legend>Service type *</legend>
+        <legend data-i18n="legendService">Service type *</legend>
         <div class="chips">
-          <label class="chip"><input type="checkbox" name="service" value="Regular cleaning"> Regular</label>
-          <label class="chip"><input type="checkbox" name="service" value="Deep cleaning"> Deep</label>
-          <label class="chip"><input type="checkbox" name="service" value="Move-in / move-out"> Move-in/out</label>
-          <label class="chip"><input type="checkbox" name="service" value="Home organization"> Organization</label>
+          <label class="chip"><input type="checkbox" name="service" value="Regular cleaning"> <span data-i18n="chipRegular">Regular</span></label>
+          <label class="chip"><input type="checkbox" name="service" value="Deep cleaning"> <span data-i18n="chipDeep">Deep</span></label>
+          <label class="chip"><input type="checkbox" name="service" value="Move-in / move-out"> <span data-i18n="chipMoveInOut">Move-in/out</span></label>
+          <label class="chip"><input type="checkbox" name="service" value="Home organization"> <span data-i18n="chipOrganization">Organization</span></label>
         </div>
       </fieldset>
 
       <fieldset class="diets">
-        <legend>Frequency</legend>
+        <legend data-i18n="legendFreq">Frequency</legend>
         <div class="chips">
-          <label class="chip"><input type="radio" name="freq" value="One-time" checked> One-time</label>
-          <label class="chip"><input type="radio" name="freq" value="Weekly"> Weekly</label>
-          <label class="chip"><input type="radio" name="freq" value="Bi-weekly"> Bi-weekly</label>
-          <label class="chip"><input type="radio" name="freq" value="Monthly"> Monthly</label>
+          <label class="chip"><input type="radio" name="freq" value="One-time" checked> <span data-i18n="chipOneTime">One-time</span></label>
+          <label class="chip"><input type="radio" name="freq" value="Weekly"> <span data-i18n="chipWeekly">Weekly</span></label>
+          <label class="chip"><input type="radio" name="freq" value="Bi-weekly"> <span data-i18n="chipBiWeekly">Bi-weekly</span></label>
+          <label class="chip"><input type="radio" name="freq" value="Monthly"> <span data-i18n="chipMonthly">Monthly</span></label>
         </div>
       </fieldset>
 
-      <label class="form-row" for="schedule"><span>Preferred day / time</span>
-        <input id="schedule" name="schedule" type="text" maxlength="120" placeholder="e.g. Tuesday mornings">
+      <label class="form-row" for="schedule"><span data-i18n="labelSchedule">Preferred day / time</span>
+        <input id="schedule" name="schedule" type="text" maxlength="120" placeholder="e.g. Tuesday mornings" data-i18n-placeholder="phSchedule">
       </label>
-      <label class="form-row" for="focus"><span>Areas to focus on</span>
-        <input id="focus" name="focus" type="text" maxlength="200" placeholder="Kitchen, baths, closets…">
+      <label class="form-row" for="focus"><span data-i18n="labelFocus">Areas to focus on</span>
+        <input id="focus" name="focus" type="text" maxlength="200" placeholder="Kitchen, baths, closets…" data-i18n-placeholder="phFocus">
       </label>
-      <label class="form-row" for="products"><span>Product concerns / preferences</span>
-        <input id="products" name="products" type="text" maxlength="200" placeholder="Fragrance-free, your products, allergies…">
+      <label class="form-row" for="products"><span data-i18n="labelProducts">Product concerns / preferences</span>
+        <input id="products" name="products" type="text" maxlength="200" placeholder="Fragrance-free, your products, allergies…" data-i18n-placeholder="phProducts">
       </label>
-      <label class="form-row" for="found"><span>How did you find us?</span>
-        <input id="found" name="found" type="text" maxlength="120" placeholder="Friend, flyer, Google…">
+      <label class="form-row" for="found"><span data-i18n="labelFound">How did you find us?</span>
+        <input id="found" name="found" type="text" maxlength="120" placeholder="Friend, flyer, Google…" data-i18n-placeholder="phFound">
       </label>
-      <label class="notes" for="notes"><span>Notes</span>
-        <textarea id="notes" name="notes" maxlength="400" placeholder="Anything else we should know"></textarea>
+      <label class="notes" for="notes"><span data-i18n="labelNotes">Notes</span>
+        <textarea id="notes" name="notes" maxlength="400" placeholder="Anything else we should know" data-i18n-placeholder="phNotes"></textarea>
       </label>
 
-      <h3 class="preview-label">Text that will be filled in</h3>
+      <h3 class="preview-label" data-i18n="previewLabel">Text that will be filled in</h3>
       <pre id="preview" class="preview">Fill in the form. The text Anne &amp; Rosana will receive shows here.</pre>
       <div id="send-host"></div>
       <p id="form-hint" class="hint" role="status"></p>
-      <p class="fineprint">*Starting price; final quote depends on home size and services.</p>
+      <p class="fineprint" data-i18n="fineprint">*Starting price; final quote depends on home size and services.</p>
     </section>
 
-    <p class="foot">Organic House Cleaning · Anne &amp; Rosana · <a href="tel:+17273792528">727-379-2528</a></p>
-    <p class="foot-sub">Cleaner homes · Happier lives</p>
+    <p class="foot"><span data-i18n="foot">Organic House Cleaning · Anne &amp; Rosana · </span><a href="tel:+17273792528">727-379-2528</a></p>
+    <p class="foot-sub" data-i18n="footSub">Cleaner homes · Happier lives</p>
   </div>
   <script src="config.js"></script>
+  <script src="i18n.js"></script>
   <script src="qr-code.js"></script>
   <script src="app.js"></script>
 </body>

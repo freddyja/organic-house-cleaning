@@ -2,7 +2,10 @@
   const cfg = window.OHC_CONFIG || {};
   const PHONE = cfg.phoneE164 || "7273792528";
   const CANONICAL = "https://computingmadeeasy.org/organic-house-cleaning/";
+  const LANG_KEY = "ohc-lang";
   const $ = (id) => document.getElementById(id);
+  const t = (key) => (typeof window.ohcT === "function" ? window.ohcT(key) : key);
+  const tv = (englishValue) => (typeof window.ohcVal === "function" ? window.ohcVal(englishValue) : englishValue);
 
   function apiBase() {
     const configured = (cfg.apiBase || "").replace(/\/$/, "");
@@ -66,22 +69,22 @@
   function buildBody() {
     const f = collectFields();
     const lines = [
-      "Free quote request — Organic House Cleaning",
-      f.name && `Name: ${f.name}`,
-      f.phone && `Phone: ${f.phone}`,
-      f.email && `Email: ${f.email}`,
-      f.address && `Address: ${f.address}`,
-      f.homeType && `Home: ${f.homeType}`,
-      (f.beds || f.baths) && `Beds/Baths: ${f.beds || "—"} / ${f.baths || "—"}`,
-      f.sqft && `Sq ft: ${f.sqft}`,
-      f.pets && `Pets: ${f.pets}`,
-      f.services.length && `Service: ${f.services.join(", ")}`,
-      f.frequency && `Frequency: ${f.frequency}`,
-      f.schedule && `Preferred schedule: ${f.schedule}`,
-      f.focus && `Focus areas: ${f.focus}`,
-      f.products && `Products: ${f.products}`,
-      f.found && `Found us via: ${f.found}`,
-      f.notes && `Notes: ${f.notes}`,
+      t("smsTitle"),
+      f.name && `${t("smsName")}: ${f.name}`,
+      f.phone && `${t("smsPhone")}: ${f.phone}`,
+      f.email && `${t("smsEmail")}: ${f.email}`,
+      f.address && `${t("smsAddress")}: ${f.address}`,
+      f.homeType && `${t("smsHome")}: ${tv(f.homeType)}`,
+      (f.beds || f.baths) && `${t("smsBedsBaths")}: ${f.beds || "—"} / ${f.baths || "—"}`,
+      f.sqft && `${t("smsSqft")}: ${f.sqft}`,
+      f.pets && `${t("smsPets")}: ${tv(f.pets)}`,
+      f.services.length && `${t("smsService")}: ${f.services.map(tv).join(", ")}`,
+      f.frequency && `${t("smsFrequency")}: ${tv(f.frequency)}`,
+      f.schedule && `${t("smsSchedule")}: ${f.schedule}`,
+      f.focus && `${t("smsFocus")}: ${f.focus}`,
+      f.products && `${t("smsProducts")}: ${f.products}`,
+      f.found && `${t("smsFound")}: ${f.found}`,
+      f.notes && `${t("smsNotes")}: ${f.notes}`,
     ].filter(Boolean);
     return lines.join("\n");
   }
@@ -89,10 +92,10 @@
   function validate() {
     const f = collectFields();
     const phoneDigits = digits(f.phone);
-    if (!/[A-Za-z]/.test(f.name)) return { ok: false, hint: "Enter your name." };
-    if (phoneDigits.length < 10 || phoneDigits.length > 15) return { ok: false, hint: "Enter a phone number so we can reach you." };
-    if (f.address.length < 3) return { ok: false, hint: "Enter your address or ZIP." };
-    if (!f.services.length) return { ok: false, hint: "Pick at least one service type." };
+    if (!/[A-Za-zÀ-ÿ]/.test(f.name)) return { ok: false, hint: t("hintName") };
+    if (phoneDigits.length < 10 || phoneDigits.length > 15) return { ok: false, hint: t("hintPhone") };
+    if (f.address.length < 3) return { ok: false, hint: t("hintAddress") };
+    if (!f.services.length) return { ok: false, hint: t("hintService") };
     return { ok: true, hint: "" };
   }
 
@@ -105,6 +108,7 @@
     const payload = {
       ...f,
       smsBody,
+      lang: window.ohcLang || "en",
       source: location.href.split("#")[0],
       utm: readUtm(),
     };
@@ -166,18 +170,18 @@
     const host = $("send-host");
     const btn = host.querySelector("a.send, button.send");
     if (btn) {
-      btn.textContent = "Saving…";
+      btn.textContent = t("saving");
       if (btn.tagName === "BUTTON") btn.disabled = true;
     }
-    $("form-hint").textContent = "Saving your request…";
+    $("form-hint").textContent = t("savingHint");
     const saved = await saveLead(body);
     submitting = false;
     refresh();
     if (saved.ok) {
-      $("form-hint").textContent = "Saved — opening your text message…";
-      showToast("Request saved");
+      $("form-hint").textContent = t("savedHint");
+      showToast(t("savedToast"));
     } else {
-      $("form-hint").textContent = "Could not reach the server — opening text message instead.";
+      $("form-hint").textContent = t("saveFailedHint");
     }
     // Always offer sms: fallback / continuation
     location.href = buildSmsUrl(body);
@@ -186,7 +190,7 @@
   function refresh() {
     const body = buildBody();
     const v = validate();
-    $("preview").textContent = body || "Fill in the form. The text Anne & Rosana will receive shows here.";
+    $("preview").textContent = body || t("previewEmpty");
     if (!submitting) $("form-hint").textContent = v.hint;
     const host = $("send-host");
     host.replaceChildren();
@@ -194,7 +198,7 @@
       const link = document.createElement("a");
       link.className = "send";
       link.href = buildSmsUrl(body);
-      link.textContent = "Send free quote request";
+      link.textContent = t("sendBtn");
       link.addEventListener("click", onSubmitClick);
       host.append(link);
     } else {
@@ -202,9 +206,66 @@
       btn.type = "button";
       btn.className = "send";
       btn.disabled = true;
-      btn.textContent = "Send free quote request";
+      btn.textContent = t("sendBtn");
       host.append(btn);
     }
+  }
+
+  function applyLang() {
+    const lang = window.ohcLang || "en";
+    const dict = (window.OHC_I18N && window.OHC_I18N[lang]) || {};
+    document.documentElement.lang = dict.htmlLang || lang;
+
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.getAttribute("data-i18n");
+      el.textContent = t(key);
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+      el.setAttribute("placeholder", t(el.getAttribute("data-i18n-placeholder")));
+    });
+    document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+      el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria")));
+    });
+    document.querySelectorAll("[data-i18n-content]").forEach((el) => {
+      el.setAttribute("content", t(el.getAttribute("data-i18n-content")));
+    });
+
+    document.querySelectorAll(".lang-btn").forEach((btn) => {
+      const on = btn.dataset.lang === lang;
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-pressed", String(on));
+    });
+
+    // Re-apply install tip if visible
+    const tip = $("install-tip");
+    if (tip && !tip.hidden && tip.textContent) {
+      const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      tip.textContent = isIos ? t("installTipIos") : t("installTipAndroid");
+    }
+
+    refresh();
+  }
+
+  function initLangSwitch() {
+    let saved = "en";
+    try {
+      saved = localStorage.getItem(LANG_KEY) || "en";
+    } catch {
+      saved = "en";
+    }
+    window.ohcLang = ["en", "es", "pt"].includes(saved) ? saved : "en";
+    document.querySelectorAll(".lang-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        window.ohcLang = btn.dataset.lang;
+        try {
+          localStorage.setItem(LANG_KEY, window.ohcLang);
+        } catch {
+          /* ignore */
+        }
+        applyLang();
+      });
+    });
+    applyLang();
   }
 
   function shareUrl() {
@@ -219,20 +280,20 @@
   }
 
   function showToast(msg) {
-    const t = $("toast");
-    t.textContent = msg;
-    t.hidden = false;
+    const el = $("toast");
+    el.textContent = msg;
+    el.hidden = false;
     clearTimeout(showToast._timer);
-    showToast._timer = setTimeout(() => { t.hidden = true; }, 2200);
+    showToast._timer = setTimeout(() => { el.hidden = true; }, 2200);
   }
 
   async function copyLink() {
     const url = shareUrl();
     try {
       await navigator.clipboard.writeText(url);
-      showToast("Link copied");
+      showToast(t("linkCopied"));
     } catch {
-      showToast("Could not copy — select the address bar");
+      showToast(t("copyFailed"));
     }
   }
 
@@ -252,10 +313,10 @@
       const svg = host.querySelector("svg");
       if (svg) {
         svg.setAttribute("role", "img");
-        svg.setAttribute("aria-label", "QR code for Organic House Cleaning free quote");
+        svg.setAttribute("aria-label", t("qrAria"));
       }
     } catch (err) {
-      host.textContent = "QR unavailable";
+      host.textContent = t("qrUnavailable");
       console.warn(err);
     }
   }
@@ -268,8 +329,8 @@
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Organic House Cleaning — Free Quote",
-          text: "Request a free quote from Anne & Rosana.",
+          title: t("shareTitleNative"),
+          text: t("shareTextNative"),
           url,
         });
       } catch (error) {
@@ -298,9 +359,7 @@
     btn.hidden = false;
     btn.onclick = () => {
       tip.hidden = false;
-      tip.textContent = isIos
-        ? "On iPhone: tap Share, then Add to Home Screen."
-        : "Use your browser menu → Install app / Add to Home Screen.";
+      tip.textContent = isIos ? t("installTipIos") : t("installTipAndroid");
     };
   }
 
@@ -319,15 +378,40 @@
 
   function setupAutoUpdate() {
     if (!("serviceWorker" in navigator)) return;
-    navigator.serviceWorker.register("./sw.js").then((reg) => {
-      reg.update();
-      setInterval(() => reg.update(), 60 * 60 * 1000);
-      let refreshing = false;
-      navigator.serviceWorker.addEventListener("controllerchange", () => {
-        if (refreshing) return;
-        refreshing = true;
-        location.reload();
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing) return;
+      refreshing = true;
+      location.reload();
+    });
+
+    function checkForUpdate(reg) {
+      if (!reg || typeof reg.update !== "function") return;
+      reg.update().catch(() => {});
+      if (reg.waiting) {
+        try { reg.waiting.postMessage({ type: "SKIP_WAITING" }); } catch (_) { /* ignore */ }
+      }
+      if (typeof reg.addEventListener === "function") {
+        reg.addEventListener("updatefound", () => {
+          const worker = reg.installing;
+          if (!worker) return;
+          worker.addEventListener("statechange", () => {
+            if (worker.state === "installed" && navigator.serviceWorker.controller) {
+              try { worker.postMessage({ type: "SKIP_WAITING" }); } catch (_) { /* ignore */ }
+            }
+          });
+        });
+      }
+    }
+
+    navigator.serviceWorker.register("./sw.js", { updateViaCache: "none" }).then((reg) => {
+      checkForUpdate(reg);
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") checkForUpdate(reg);
       });
+      window.addEventListener("pageshow", () => checkForUpdate(reg));
+      window.addEventListener("focus", () => checkForUpdate(reg));
+      setInterval(() => checkForUpdate(reg), 60 * 60 * 1000);
     }).catch(() => {});
   }
 
@@ -339,8 +423,8 @@
   }
   $("share-site").addEventListener("click", onShare);
   $("copy-share-link").addEventListener("click", copyLink);
+  initLangSwitch();
   updateInstallUi();
   setupAutoUpdate();
-  refresh();
   logVisit();
 })();
