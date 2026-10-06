@@ -1,0 +1,9 @@
+{
+  "name": "organic-house-cleaning",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Organic House Cleaning quote PWA + lead tracking + appointment reminders",
+  "engines": {
+    "node": ">=18"
+  }
+}

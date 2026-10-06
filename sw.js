@@ -1,8 +1,9 @@
-const CACHE_NAME = "ohc-quote-v1";
+const CACHE_NAME = "ohc-quote-v2";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
+  "./config.js",
   "./app.js",
   "./qr-code.js",
   "./manifest.webmanifest",
@@ -50,6 +51,11 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+  // Never cache admin or API
+  if (url.pathname.includes("/api/") || url.pathname.endsWith("/admin.html") || url.pathname.endsWith("/admin.js")) {
+    event.respondWith(fetch(request));
+    return;
+  }
   event.respondWith(
     networkRequest(request).catch(() => caches.match(request).then((cached) => cached || caches.match("./")))
   );

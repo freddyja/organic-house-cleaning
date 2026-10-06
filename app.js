@@ -1,7 +1,21 @@
 (() => {
-  const PHONE = "7273792528";
+  const cfg = window.OHC_CONFIG || {};
+  const PHONE = cfg.phoneE164 || "7273792528";
   const CANONICAL = "https://computingmadeeasy.org/organic-house-cleaning/";
   const $ = (id) => document.getElementById(id);
+
+  function apiBase() {
+    const configured = (cfg.apiBase || "").replace(/\/$/, "");
+    const host = location.hostname;
+    if (host.includes("vercel.app") || host === "localhost" || host === "127.0.0.1") {
+      return "";
+    }
+    return configured;
+  }
+
+  function apiUrl(path) {
+    return `${apiBase()}${path}`;
+  }
 
   function radioValue(name) {
     const el = document.querySelector(`input[name="${name}"]:checked`);
@@ -14,54 +28,71 @@
     return String(s || "").replace(/\D/g, "");
   }
 
-  function buildBody() {
-    const name = $("cust-name").value.trim();
-    const phone = $("cust-phone").value.trim();
-    const email = $("cust-email").value.trim();
-    const address = $("cust-address").value.trim();
-    const home = radioValue("home-type");
-    const beds = $("beds").value.trim();
-    const baths = $("baths").value.trim();
-    const sqft = $("sqft").value.trim();
-    const pets = radioValue("pets");
-    const services = checkedServices();
-    const freq = radioValue("freq");
-    const schedule = $("schedule").value.trim();
-    const focus = $("focus").value.trim();
-    const products = $("products").value.trim();
-    const found = $("found").value.trim();
-    const notes = $("notes").value.trim();
+  function readUtm() {
+    try {
+      const q = new URLSearchParams(location.search);
+      const utm = {};
+      for (const k of ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]) {
+        const v = q.get(k);
+        if (v) utm[k] = v.slice(0, 120);
+      }
+      return utm;
+    } catch {
+      return {};
+    }
+  }
 
+  function collectFields() {
+    return {
+      name: $("cust-name").value.trim(),
+      phone: $("cust-phone").value.trim(),
+      email: $("cust-email").value.trim(),
+      address: $("cust-address").value.trim(),
+      homeType: radioValue("home-type"),
+      beds: $("beds").value.trim(),
+      baths: $("baths").value.trim(),
+      sqft: $("sqft").value.trim(),
+      pets: radioValue("pets"),
+      services: checkedServices(),
+      frequency: radioValue("freq"),
+      schedule: $("schedule").value.trim(),
+      focus: $("focus").value.trim(),
+      products: $("products").value.trim(),
+      found: $("found").value.trim(),
+      notes: $("notes").value.trim(),
+    };
+  }
+
+  function buildBody() {
+    const f = collectFields();
     const lines = [
       "Free quote request — Organic House Cleaning",
-      name && `Name: ${name}`,
-      phone && `Phone: ${phone}`,
-      email && `Email: ${email}`,
-      address && `Address: ${address}`,
-      home && `Home: ${home}`,
-      (beds || baths) && `Beds/Baths: ${beds || "—"} / ${baths || "—"}`,
-      sqft && `Sq ft: ${sqft}`,
-      pets && `Pets: ${pets}`,
-      services.length && `Service: ${services.join(", ")}`,
-      freq && `Frequency: ${freq}`,
-      schedule && `Preferred schedule: ${schedule}`,
-      focus && `Focus areas: ${focus}`,
-      products && `Products: ${products}`,
-      found && `Found us via: ${found}`,
-      notes && `Notes: ${notes}`,
+      f.name && `Name: ${f.name}`,
+      f.phone && `Phone: ${f.phone}`,
+      f.email && `Email: ${f.email}`,
+      f.address && `Address: ${f.address}`,
+      f.homeType && `Home: ${f.homeType}`,
+      (f.beds || f.baths) && `Beds/Baths: ${f.beds || "—"} / ${f.baths || "—"}`,
+      f.sqft && `Sq ft: ${f.sqft}`,
+      f.pets && `Pets: ${f.pets}`,
+      f.services.length && `Service: ${f.services.join(", ")}`,
+      f.frequency && `Frequency: ${f.frequency}`,
+      f.schedule && `Preferred schedule: ${f.schedule}`,
+      f.focus && `Focus areas: ${f.focus}`,
+      f.products && `Products: ${f.products}`,
+      f.found && `Found us via: ${f.found}`,
+      f.notes && `Notes: ${f.notes}`,
     ].filter(Boolean);
     return lines.join("\n");
   }
 
   function validate() {
-    const name = $("cust-name").value.trim();
-    const phoneDigits = digits($("cust-phone").value);
-    const address = $("cust-address").value.trim();
-    const services = checkedServices();
-    if (!/[A-Za-z]/.test(name)) return { ok: false, hint: "Enter your name." };
+    const f = collectFields();
+    const phoneDigits = digits(f.phone);
+    if (!/[A-Za-z]/.test(f.name)) return { ok: false, hint: "Enter your name." };
     if (phoneDigits.length < 10 || phoneDigits.length > 15) return { ok: false, hint: "Enter a phone number so we can reach you." };
-    if (address.length < 3) return { ok: false, hint: "Enter your address or ZIP." };
-    if (!services.length) return { ok: false, hint: "Pick at least one service type." };
+    if (f.address.length < 3) return { ok: false, hint: "Enter your address or ZIP." };
+    if (!f.services.length) return { ok: false, hint: "Pick at least one service type." };
     return { ok: true, hint: "" };
   }
 
@@ -69,31 +100,114 @@
     return `sms:+1${PHONE}?&body=${encodeURIComponent(body)}`;
   }
 
+  async function saveLead(smsBody) {
+    const f = collectFields();
+    const payload = {
+      ...f,
+      smsBody,
+      source: location.href.split("#")[0],
+      utm: readUtm(),
+    };
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    try {
+      const res = await fetch(apiUrl("/api/leads"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+      const data = await res.json().catch(() => ({}));
+      return { ok: res.ok, data };
+    } catch (err) {
+      return { ok: false, error: err };
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function logVisit() {
+    try {
+      const payload = {
+        path: location.pathname + location.search,
+        referrer: document.referrer || "",
+        userAgent: (navigator.userAgent || "").slice(0, 180),
+        utm: readUtm(),
+      };
+      const body = JSON.stringify(payload);
+      if (navigator.sendBeacon) {
+        const blob = new Blob([body], { type: "application/json" });
+        navigator.sendBeacon(apiUrl("/api/visits"), blob);
+        return;
+      }
+      fetch(apiUrl("/api/visits"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+        keepalive: true,
+      }).catch(() => {});
+    } catch {
+      /* ignore */
+    }
+  }
+
+  let submitting = false;
+
+  async function onSubmitClick(ev) {
+    ev.preventDefault();
+    if (submitting) return;
+    const v = validate();
+    if (!v.ok) {
+      $("form-hint").textContent = v.hint;
+      return;
+    }
+    submitting = true;
+    const body = buildBody();
+    const host = $("send-host");
+    const btn = host.querySelector("a.send, button.send");
+    if (btn) {
+      btn.textContent = "Saving…";
+      if (btn.tagName === "BUTTON") btn.disabled = true;
+    }
+    $("form-hint").textContent = "Saving your request…";
+    const saved = await saveLead(body);
+    submitting = false;
+    refresh();
+    if (saved.ok) {
+      $("form-hint").textContent = "Saved — opening your text message…";
+      showToast("Request saved");
+    } else {
+      $("form-hint").textContent = "Could not reach the server — opening text message instead.";
+    }
+    // Always offer sms: fallback / continuation
+    location.href = buildSmsUrl(body);
+  }
+
   function refresh() {
     const body = buildBody();
     const v = validate();
     $("preview").textContent = body || "Fill in the form. The text Anne & Rosana will receive shows here.";
-    $("form-hint").textContent = v.hint;
+    if (!submitting) $("form-hint").textContent = v.hint;
     const host = $("send-host");
     host.replaceChildren();
     if (v.ok) {
       const link = document.createElement("a");
       link.className = "send";
       link.href = buildSmsUrl(body);
-      link.textContent = "Text free quote request";
+      link.textContent = "Send free quote request";
+      link.addEventListener("click", onSubmitClick);
       host.append(link);
     } else {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "send";
       btn.disabled = true;
-      btn.textContent = "Text free quote request";
+      btn.textContent = "Send free quote request";
       host.append(btn);
     }
   }
 
   function shareUrl() {
-    // Prefer CME canonical when live; fall back to current origin for Pages preview
     try {
       const here = location.href.split("#")[0];
       if (here.includes("computingmadeeasy.org")) return here;
@@ -180,7 +294,6 @@
       tip.hidden = true;
       return;
     }
-    // iOS / browsers without beforeinstallprompt
     const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
     btn.hidden = false;
     btn.onclick = () => {
@@ -229,4 +342,5 @@
   updateInstallUi();
   setupAutoUpdate();
   refresh();
+  logVisit();
 })();

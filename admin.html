@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2D4739">
+  <meta name="robots" content="noindex,nofollow">
+  <title>OHC Admin — Anne &amp; Rosana</title>
+  <link rel="icon" href="icons/ohc-192.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap admin-wrap">
+    <header class="mast">
+      <p class="kicker">Staff only</p>
+      <h1 class="logo" style="font-size:1.6rem">OHC Admin</h1>
+      <p class="owners">Anne &amp; Rosana · Organic House Cleaning</p>
+    </header>
+
+    <section class="ticket" id="login-panel">
+      <h2>Sign in</h2>
+      <p class="form-intro">Password from Vercel env <code>ADMIN_PASSWORD</code>.</p>
+      <label class="form-row" for="admin-password"><span>Password</span>
+        <input id="admin-password" type="password" autocomplete="current-password" required>
+      </label>
+      <button type="button" class="send" id="login-btn">Sign in</button>
+      <p class="hint" id="login-hint" role="status"></p>
+    </section>
+
+    <section class="ticket admin-dash" id="dash" hidden>
+      <div class="admin-top">
+        <h2>Dashboard</h2>
+        <button type="button" class="action-btn" id="logout-btn">Sign out</button>
+      </div>
+      <p class="admin-meta" id="storage-meta"></p>
+      <div class="admin-stats" id="stats"></div>
+
+      <h3 class="admin-section">Leads</h3>
+      <div id="leads-list" class="admin-list"></div>
+
+      <h3 class="admin-section">Appointments</h3>
+      <form id="appt-form" class="appt-form">
+        <label class="form-row" for="appt-name"><span>Client name *</span>
+          <input id="appt-name" required maxlength="80">
+        </label>
+        <label class="form-row" for="appt-phone"><span>Phone *</span>
+          <input id="appt-phone" type="tel" required maxlength="20">
+        </label>
+        <label class="form-row" for="appt-when"><span>Date &amp; time (Florida / Eastern) *</span>
+          <input id="appt-when" type="datetime-local" required>
+        </label>
+        <label class="form-row" for="appt-notes"><span>Notes</span>
+          <input id="appt-notes" maxlength="200">
+        </label>
+        <button type="submit" class="send">Add appointment</button>
+        <p class="hint" id="appt-hint" role="status"></p>
+      </form>
+      <div id="appts-list" class="admin-list"></div>
+
+      <h3 class="admin-section">Recent visits</h3>
+      <div id="visits-list" class="admin-list"></div>
+
+      <button type="button" class="action-btn share-copy" id="refresh-btn" style="margin-top:1rem">Refresh</button>
+    </section>
+
+    <p class="foot"><a href="./">← Quote page</a></p>
+  </div>
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

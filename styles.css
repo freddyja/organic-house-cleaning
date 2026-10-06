@@ -166,3 +166,46 @@ textarea { min-height: 5rem; resize: vertical; }
   .svc-grid { grid-template-columns: 1fr; }
   .mast-brand { padding: 0 3.4rem; }
 }
+
+/* —— Admin —— */
+.admin-wrap { max-width: 44rem; }
+.admin-top { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.admin-top h2 { margin: 0; font-family: Georgia, serif; }
+.admin-meta { margin: .5rem 0 1rem; color: var(--muted); font-size: .85rem; }
+.admin-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: .65rem; margin-bottom: 1.25rem;
+}
+.stat {
+  background: var(--cream); border: 1px solid var(--line); border-radius: 12px;
+  padding: .75rem; text-align: center;
+}
+.stat strong { display: block; font-size: 1.5rem; color: var(--ink); }
+.stat span { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+.admin-section {
+  margin: 1.25rem 0 .65rem; font-family: Georgia, serif; font-size: 1.15rem;
+  border-top: 1px solid var(--line); padding-top: 1rem;
+}
+.admin-list { display: flex; flex-direction: column; gap: .65rem; }
+.admin-card {
+  border: 1px solid var(--line); border-radius: 12px; padding: .75rem .85rem; background: var(--cream);
+}
+.admin-card.contacted { opacity: .72; }
+.admin-card-top { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-bottom: .35rem; }
+.admin-card p { margin: .2rem 0; font-size: .92rem; }
+.admin-card .muted, .admin-visit .muted { color: var(--muted); font-size: .82rem; }
+.badge {
+  font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em;
+  background: var(--ink); color: var(--cream); padding: .2rem .45rem; border-radius: 999px;
+}
+.admin-card.contacted .badge { background: var(--sage); }
+.admin-empty { color: var(--muted); font-style: italic; }
+.admin-visit {
+  display: grid; grid-template-columns: 9rem 1fr; gap: .25rem .65rem;
+  font-size: .82rem; padding: .45rem 0; border-bottom: 1px solid var(--line);
+}
+.admin-visit code { font-size: .78rem; word-break: break-all; }
+.appt-form { margin-bottom: 1rem; }
+@media (max-width: 520px) {
+  .admin-stats { grid-template-columns: 1fr; }
+  .admin-visit { grid-template-columns: 1fr; }
+}
